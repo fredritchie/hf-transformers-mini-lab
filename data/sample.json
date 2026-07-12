@@ -1,0 +1,3 @@
+{"id": 1, "text": "AI infrastructure combines cloud, Kubernetes, model serving, and observability.", "source": "note"}
+{"id": 2, "text": "RAG systems retrieve relevant documents before generating an answer.", "source": "note"}
+{"id": 3, "text": "Inference platforms focus on latency, throughput, scaling, and reliability.", "source": "note"}

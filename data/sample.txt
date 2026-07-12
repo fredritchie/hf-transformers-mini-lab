@@ -1,0 +1,3 @@
+AI infrastructure engineers deploy, monitor, and operate AI workloads in production.
+They often work with Kubernetes, Docker, model serving APIs, vector databases, and observability tools.
+A production RAG system usually includes document ingestion, chunking, embeddings, retrieval, answer generation, and monitoring.

@@ -1,0 +1,6 @@
+id,text,category
+1,"Kubernetes helps teams deploy scalable AI workloads.",platform
+2,"Vector databases store embeddings for semantic search.",rag
+3,"MLflow tracks experiments, metrics, parameters, and model artifacts.",mlops
+4,"Prometheus and Grafana help monitor inference APIs.",operations
+5,"FastAPI is commonly used to expose model prediction endpoints.",serving
