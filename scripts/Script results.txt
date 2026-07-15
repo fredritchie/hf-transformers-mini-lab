@@ -1,0 +1,219 @@
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/01_pipeline_demo.py
+
+================================================================================
+1. Sentiment analysis pipeline
+================================================================================
+No model was supplied, defaulted to distilbert/distilbert-base-uncased-finetuned-sst-2-english and revision 714eb0f (https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english).
+Using a pipeline without specifying a model name and revision in production is not recommended.
+Device set to use cpu
+[{'label': 'POSITIVE', 'score': 0.9988297820091248}]
+
+================================================================================
+2. Text generation pipeline
+================================================================================
+Device set to use cpu
+Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.
+AI infrastructure engineers are responsible for the development and deployment of infrastructure, and are responsible for the construction and deployment of infrastructure, and are responsible for the construction and deployment of infrastructure, and
+
+================================================================================
+3. Question answering pipeline
+================================================================================
+Device set to use cpu
+{'score': 0.1871459186077118, 'start': 29, 'end': 91, 'answer': 'deploying, scaling, monitoring, and operating machine learning'}
+
+================================================================================
+4. Summarization pipeline
+================================================================================
+Device set to use cpu
+Both `max_new_tokens` (=256) and `max_length`(=45) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+AI infrastructure combines cloud infrastructure, Kubernetes, model serving, automation, and reliability engineering . engineers build platforms that allow teams to deploy and operate AI systems in production with consistent performance and reliability .
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/02_model_tokenizer_demo.py
+Input text: Kubernetes can run scalable AI inference services.
+Input IDs: tensor([[  101, 13970,  5677,  7159,  2229,  2064,  2448, 26743,  3468,  9932,
+         28937,  2578,  1012,   102]])
+Attention mask: tensor([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
+Tokens: ['[CLS]', 'ku', '##ber', '##net', '##es', 'can', 'run', 'scala', '##ble', 'ai', 'inference', 'services', '.', '[SEP]']
+Last hidden state shape: torch.Size([1, 14, 768])
+Meaning: [batch_size, sequence_length, hidden_size]
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/03_batch_inference_demo.py
+Batch input_ids shape: torch.Size([3, 15])
+Batch attention_mask shape: torch.Size([3, 15])
+
+Text: The AI inference platform is reliable and fast.
+Prediction: POSITIVE | Confidence: 0.9996
+
+Text: The deployment failed because the service was misconfigured.
+Prediction: NEGATIVE | Confidence: 0.9997
+
+Text: Monitoring helped us detect latency issues early.
+Prediction: NEGATIVE | Confidence: 0.8544
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/03_batch_inference_demo.py
+Batch input_ids shape: torch.Size([3, 15])
+Batch attention_mask shape: torch.Size([3, 15])
+
+Text: The AI inference platform is reliable and fast.
+Prediction: POSITIVE | Confidence: 0.9996
+
+Text: The deployment failed because the service was misconfigured.
+Prediction: NEGATIVE | Confidence: 0.9997
+
+Text: Monitoring helped us detect latency issues early.
+Prediction: NEGATIVE | Confidence: 0.8544
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/04_dataset_demo.py 
+Original dataset:
+Dataset({
+    features: ['text', 'category'],
+    num_rows: 5
+})
+{'text': 'Kubernetes runs containers at scale.', 'category': 'platform'}
+
+Selected first 3 rows:
+Dataset({
+    features: ['text', 'category'],
+    num_rows: 3
+})
+Filter: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:00<00:00, 264.59 examples/s]
+
+Filtered rows:
+Dataset({
+    features: ['text', 'category'],
+    num_rows: 2
+})
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:00<00:00, 1239.45 examples/s]
+
+Dataset after map():
+{'text': 'Kubernetes runs containers at scale.', 'category': 'platform', 'text_length': 36}
+
+Train/test split:
+DatasetDict({
+    train: Dataset({
+        features: ['text', 'category'],
+        num_rows: 3
+    })
+    test: Dataset({
+        features: ['text', 'category'],
+        num_rows: 2
+    })
+})
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/05_custom_dataset_demo.py 
+Loading CSV dataset
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'text', 'category'],
+        num_rows: 5
+    })
+})
+{'id': 1, 'text': 'Kubernetes helps teams deploy scalable AI workloads.', 'category': 'platform'}
+
+Loading JSON dataset
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'text', 'source'],
+        num_rows: 3
+    })
+})
+{'id': 1, 'text': 'AI infrastructure combines cloud, Kubernetes, model serving, and observability.', 'source': 'note'}
+
+Loading text dataset
+DatasetDict({
+    train: Dataset({
+        features: ['text'],
+        num_rows: 3
+    })
+})
+{'text': 'AI infrastructure engineers deploy, monitor, and operate AI workloads in production.'}
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/06_tokenizer_comparison.py 
+
+================================================================================
+bert-base-uncased
+================================================================================
+Tokens: ['ai', 'infrastructure', 'engineers', 'deploy', 'ku', '##ber', '##net', '##es', '-', 'based', 'inference', 'platforms', '.']
+Token count: 13
+Token IDs: [9932, 6502, 6145, 21296, 13970, 5677, 7159, 2229, 1011, 2241, 28937, 7248, 1012] 
+
+================================================================================
+gpt2
+================================================================================
+Tokens: ['AI', 'Ġinfrastructure', 'Ġengineers', 'Ġdeploy', 'ĠKu', 'ber', 'net', 'es', '-', 'based', 'Ġinference', 'Ġplatforms', '.']
+Token count: 13
+Token IDs: [20185, 6884, 12037, 6061, 12554, 527, 3262, 274, 12, 3106, 32278, 9554, 13] 
+
+================================================================================
+roberta-base
+================================================================================
+Tokens: ['AI', 'Ġinfrastructure', 'Ġengineers', 'Ġdeploy', 'ĠKu', 'ber', 'net', 'es', '-', 'based', 'Ġinference', 'Ġplatforms', '.']
+Token count: 13
+Token IDs: [15238, 2112, 8610, 11386, 9609, 1943, 4135, 293, 12, 805, 42752, 4818, 4] 
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/07_fast_tokenizer_offsets.py 
+Is fast tokenizer: True
+
+Token to character offsets:
+
+[CLS]           -> ( 0,  0) -> ''
+inference       -> ( 0,  9) -> 'Inference'
+platform        -> (10, 18) -> 'platform'
+engineers       -> (19, 28) -> 'engineers'
+monitor         -> (29, 36) -> 'monitor'
+late            -> (37, 41) -> 'late'
+##ncy           -> (41, 44) -> 'ncy'
+,               -> (44, 45) -> ','
+through         -> (46, 53) -> 'through'
+##put           -> (53, 56) -> 'put'
+,               -> (56, 57) -> ','
+and             -> (58, 61) -> 'and'
+errors          -> (62, 68) -> 'errors'
+.               -> (68, 69) -> '.'
+[SEP]           -> ( 0,  0) -> ''
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/08_faiss_semantic_search_demo.py 
+Query: How can I monitor an AI inference service?
+
+Top results:
+1. score=0.4452 | Prometheus and Grafana are useful for monitoring inference latency and errors.
+2. score=0.3987 | FastAPI can expose a model serving endpoint for prediction requests.
+3. score=0.3945 | Kubernetes helps deploy and scale containerized AI services.
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/09_summarization_demo.py 
+Device set to use cpu
+Both `max_new_tokens` (=256) and `max_length`(=55) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Original text:
+ AI infrastructure engineers build platforms for deploying and operating machine learning and large language model workloads. These platforms often include model serving APIs, Kubernetes deployments, monitoring dashboards, CI/CD pipelines, vector databases, and operational runbooks. The goal is to make AI systems reliable, scalable, observable, and easy for product teams to use.
+
+Summary:
+ AI infrastructure engineers build platforms for deploying and operating machine learning and large language model workloads . the goal is to make AI systems reliable, scalable, observable, and easy to use .
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/10_question_answering_demo.py 
+Device set to use cpu
+Context:
+ A production RAG platform usually includes document ingestion, chunking, embedding generation, vector database storage, retrieval, answer generation, authentication, monitoring, and deployment automation.
+
+Question: What does a production RAG platform include?
+Answer: deployment automation
+Score: 0.0132
+
+Question: Where are embeddings stored?
+Answer: vector database
+Score: 0.683
+
+Question: What comes before embedding generation?
+Answer: document ingestion, chunking
+Score: 0.4197
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/11_token_classification_demo.py 
+Some weights of the model checkpoint at dslim/bert-base-NER were not used when initializing BertForTokenClassification: ['bert.pooler.dense.bias', 'bert.pooler.dense.weight']
+- This IS expected if you are initializing BertForTokenClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForTokenClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Device set to use cpu
+/home/ubuntu/hf-transformers-mini-lab/.venv/lib/python3.12/site-packages/transformers/pipelines/token_classification.py:186: UserWarning: `grouped_entities` is deprecated and will be removed in version v5.0.0, defaulted to `aggregation_strategy="AggregationStrategy.SIMPLE"` instead.
+  warnings.warn(
+Text: Fredrick works on Kubernetes and AWS in Chennai for AI infrastructure projects.
+
+Entities:
+{'entity_group': 'PER', 'score': np.float32(0.6474085), 'word': 'Fredrick', 'start': 0, 'end': 8}
+{'entity_group': 'ORG', 'score': np.float32(0.94640326), 'word': 'Kubernetes', 'start': 18, 'end': 28}
+{'entity_group': 'ORG', 'score': np.float32(0.9925457), 'word': 'AWS', 'start': 33, 'end': 36}
+{'entity_group': 'LOC', 'score': np.float32(0.9994728), 'word': 'Chennai', 'start': 40, 'end': 47}
+{'entity_group': 'MISC', 'score': np.float32(0.9532747), 'word': 'AI', 'start': 52, 'end': 54}
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/12_translation_demo.py 
+Device set to use cpu
+Both `max_new_tokens` (=256) and `max_length`(=60) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+English: AI infrastructure engineers deploy and monitor machine learning systems.
+German: AI-Infrastrukturingenieure setzen und überwachen Maschinenlernsysteme.
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ python3 scripts/^C
+(.venv) ubuntu@ip-172-31-0-47:~/hf-transformers-mini-lab$ 
